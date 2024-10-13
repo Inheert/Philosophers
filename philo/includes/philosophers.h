@@ -6,13 +6,14 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/13 14:20:51 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 15:32:10 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <limits.h>
@@ -35,22 +36,26 @@ typedef struct s_helper
 typedef struct s_philosopher
 {
 	t_helper		*helper;
-	pthread_t		*thread;
+	pthread_t		thread;
 	int				id;
-	int				last_eat;
+	long int		last_eat;
+	long int		died_time;
 	int				eat_count;
+	int				is_dead;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	right_fork;
 }	t_philosopher;
 
 // Print a customize error.
-void	raise_error(char *error, char *details);
+void			raise_error(char *error, char *details);
 // Convert STR to a int.
-int		ft_atoi(char *str);
+int				ft_atoi(char *str);
 // Get the actual time in timestamp.
-long int	actual_time(void);
+long int		actual_time(void);
 // Prepare all philosophers and create the helper structure, if a problen
 // occur then a NULL ptr is returned and the program end.
 t_philosopher	*prepare_philosophers(char **argv);
+// Start all philosophers threads.
+int				start_threads(t_philosopher *philo, t_helper *helper);
 
 #endif

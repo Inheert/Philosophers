@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:07:23 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 14:21:02 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 15:40:32 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static t_helper	*parse_param(char **argv)
 int	initialize_philosophers_struct(t_philosopher *philo,
 	t_helper *helper)
 {
-	t_philosopher	last_philo;
 	long int		start;
 	int				i;
 
@@ -58,10 +57,11 @@ int	initialize_philosophers_struct(t_philosopher *philo,
 		philo[i].id = i + 1;
 		philo[i].last_eat = start;
 		philo[i].eat_count = 0;
-		last_philo = philo[i];
+		philo[i].is_dead = 0;
 	}
 	return (0);
 }
+
 t_philosopher	*prepare_philosophers(char **argv)
 {
 	t_helper		*helper;
