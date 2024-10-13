@@ -1,4 +1,4 @@
-NAME = philosophers
+NAME = philo
 
 CC = cc
 
@@ -9,7 +9,8 @@ INCLUDES = -I ./includes/
 SRC_DIR = .
 BIN_DIR = ./bin
 
-SOURCES = main.c
+SOURCES = main.c \
+			src/error.c
 OBJECTS = $(addprefix $(BIN_DIR)/,$(SOURCES:.c=.o))
 
 all: $(NAME)
