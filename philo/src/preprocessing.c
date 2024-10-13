@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:07:23 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 15:40:32 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 16:22:15 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,12 @@ int	initialize_philosophers_struct(t_philosopher *philo,
 	i = -1;
 	while (++i < helper->philo_count)
 	{
-		if (i == 0 && pthread_mutex_init(&philo[i].right_fork, NULL) != 0)
+		if (pthread_mutex_init(&philo[i].right_fork, NULL) != 0)
 			return (raise_error("mutex", "problem occur with mutex init."), 1);
 		if (i != 0)
-			philo[i].right_fork = philo[i - 1].left_fork;
-		if (i != helper->philo_count - 1
-			&& pthread_mutex_init(&philo[i].left_fork, NULL) != 0)
-			return (raise_error("mutex", "problem occur with mutex init."), 1);
+			philo[i - 1].left_fork = &philo[i].right_fork;
 		if (i == helper->philo_count - 1)
-			philo[i].left_fork = philo[0].right_fork;
+			philo[i].left_fork = &philo[0].right_fork;
 		philo[i].helper = helper;
 		philo[i].id = i + 1;
 		philo[i].last_eat = start;
