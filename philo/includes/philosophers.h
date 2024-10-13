@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/13 16:20:56 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:14:04 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,25 @@
 // it store all useful data.
 typedef struct s_helper
 {
-	int	philo_count;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	meal_count;
+	int				philo_count;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				meal_count;
 }	t_helper;
+
+typedef struct s_shared
+{
+	int				is_someone_is_dead;
+	pthread_mutex_t	write;
+}	t_shared;
 
 // This structure is used to identify a philosopher, each one
 // being defined on the basis of this structure.
 typedef struct s_philosopher
 {
 	t_helper		*helper;
+	t_shared		*shared;
 	pthread_t		thread;
 	int				id;
 	long int		last_eat;

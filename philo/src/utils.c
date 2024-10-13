@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:58:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 14:06:41 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 17:54:41 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 long int	actual_time(void)
 {
+	static long int		start = 0;
 	long int			time;
 	struct timeval		current_time;
 
@@ -22,7 +23,9 @@ long int	actual_time(void)
 		return (raise_error("time", "a problem occur while using gettimeofday"),
 			-1);
 	time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
-	return (time);
+	if (!start)
+		start = time;
+	return (time - start);
 }
 
 int	ft_atoi(char *str)
