@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preprocessing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:07:23 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 18:17:34 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 19:03:05 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,12 @@ static t_shared	*create_shared_struct()
 	t_shared	*shared;
 
 	shared = malloc(sizeof(t_shared));
+	if (!shared)
+		return (NULL);
 	shared->is_someone_is_dead = 0;
 	if (pthread_mutex_init(&shared->write, NULL) != 0)
+		return (free(shared), NULL);
+	if (pthread_mutex_init(&shared->check_death, NULL) != 0)
 		return (free(shared), NULL);
 	return (shared);
 }
@@ -79,7 +83,7 @@ int	initialize_philosophers_struct(t_philosopher *philo,
 		philo[i].helper = copy_t_helper_struct(helper);
 		if (!philo[i].helper)
 			return (1);
-		philo->shared = shared;
+		philo[i].shared = shared;
 		philo[i].id = i + 1;
 		philo[i].last_eat = start;
 		philo[i].eat_count = 0;
@@ -102,7 +106,7 @@ t_philosopher	*prepare_philosophers(char **argv)
 	if (!helper)
 		return (raise_error("helper",
 				"a problem occur when initialize the helper struture."), NULL);
-	philosophers = malloc(sizeof(t_philosopher) * (helper->philo_count + 1));
+	philosophers = malloc(sizeof(t_philosopher) * (helper->philo_count));
 	if (!philosophers)
 		return (free(helper), raise_error("philosophers",
 				"allocation failed for the philosophers structure."), NULL);

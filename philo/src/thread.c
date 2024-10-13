@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 18:19:13 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/13 20:55:50 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	is_philo_should_die(t_philosopher *philo)
 		|| &philo->right_fork == philo->left_fork)
 	{
 		philo->is_dead = 1;
-		pthread_mutex_lock(&philo->shared->write);
+		if (philo->shared->is_someone_is_dead)
+			return (1);
 		philo->shared->is_someone_is_dead = 1;
-		pthread_mutex_unlock(&philo->shared->write);
 		died_time = actual_time();
 		pthread_mutex_lock(&philo->shared->write);
 		printf("%ld %d died.\n", died_time, philo->id);
@@ -31,6 +31,25 @@ int	is_philo_should_die(t_philosopher *philo)
 		return (1);
 	}
 	return (0);
+}
+
+int		is_philo_should_exit(t_philosopher *philo)
+{
+	pthread_mutex_lock(&philo->shared->check_death);
+	if (philo->shared->is_someone_is_dead)
+		return (pthread_mutex_unlock(&philo->shared->check_death), 1);
+	pthread_mutex_unlock(&philo->shared->check_death);
+	return (0);
+}
+
+void	start_sleeping(t_philosopher *philo)
+{
+	if (is_philo_should_exit(philo))
+		return ;
+	pthread_mutex_lock(&philo->shared->write);
+	printf("%ld %d is sleeping.\n", actual_time(), philo->id);
+	pthread_mutex_unlock(&philo->shared->write);
+	usleep(philo->helper->time_to_sleep * 1000);
 }
 
 void	start_eating(t_philosopher *philo)
@@ -45,7 +64,14 @@ void	start_eating(t_philosopher *philo)
 		pthread_mutex_lock(&philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
 	}
+	if (is_philo_should_exit(philo))
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
+		return ;
+	}
 	pthread_mutex_lock(&philo->shared->write);
+	printf("%ld %d has taken a fork.\n", actual_time(), philo->id);
 	printf("%ld %d has taken a fork.\n", actual_time(), philo->id);
 	printf("%ld %d is eating.\n", actual_time(), philo->id);
 	pthread_mutex_unlock(&philo->shared->write);
@@ -54,14 +80,6 @@ void	start_eating(t_philosopher *philo)
 	philo->eat_count++;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(&philo->right_fork);
-}
-
-void	start_sleeping(t_philosopher *philo)
-{
-	pthread_mutex_lock(&philo->shared->write);
-	printf("%ld %d is sleeping.\n", actual_time(), philo->id);
-	pthread_mutex_unlock(&philo->shared->write);
-	usleep(philo->helper->time_to_sleep * 1000);
 }
 
 void	*main_thread(void *param)
@@ -73,13 +91,21 @@ void	*main_thread(void *param)
 	helper = philo->helper;
 	if (is_philo_should_die(philo))
 		return (NULL);
-	while (philo->shared->is_someone_is_dead == 0
-		&& (philo->eat_count < helper->meal_count || helper->meal_count == 0))
+	while ((philo->eat_count < helper->meal_count || helper->meal_count == 0)
+		&& !philo->shared->is_someone_is_dead)
 	{
+		pthread_mutex_lock(&philo->shared->check_death);
 		if (is_philo_should_die(philo))
+			return (pthread_mutex_unlock(&philo->shared->check_death), NULL);
+		pthread_mutex_unlock(&philo->shared->check_death);
+		if (is_philo_should_exit(philo))
 			return (NULL);
 		start_eating(philo);
+		if (is_philo_should_exit(philo))
+			return (NULL);
 		start_sleeping(philo);
+		if (is_philo_should_exit(philo))
+			return (NULL);
 		pthread_mutex_lock(&philo->shared->write);
 		printf("%ld %d is thinking.\n", actual_time(), philo->id);
 		pthread_mutex_unlock(&philo->shared->write);
@@ -89,22 +115,30 @@ void	*main_thread(void *param)
 
 int	start_threads(t_philosopher *philo, t_helper *helper)
 {
+	t_shared		*shared;
 	int				i;
 
+	shared = philo->shared;
 	i = -1;
 	while (++i < helper->philo_count)
 	{
-		if (pthread_create(&philo[i].thread, NULL, main_thread, &philo[i]) != 0)
+		if (pthread_create(&philo[i].thread, NULL, &main_thread, &philo[i]) != 0)
 			return (raise_error("thread",
 					"a problem occur while creating threads."), 1);
 	}
 	i = -1;
 	while (++i < helper->philo_count)
 		pthread_join(philo[i].thread, NULL);
-	printf("end\n");
-	while (philo->shared->is_someone_is_dead
-		&& philo->eat_count < philo->helper->meal_count)
-		continue ;
+	while (1)
+	{
+		pthread_mutex_lock(&shared->check_death);
+		if (shared->is_someone_is_dead || (philo->eat_count == helper->meal_count && helper->meal_count != 0))
+		{
+			pthread_mutex_unlock(&shared->check_death);
+			break ;
+		}
+		pthread_mutex_unlock(&shared->check_death);
+	}
 	if (philo->shared->is_someone_is_dead)
 		printf("%ld a philosopher is dead.\n", actual_time());
 	return (0);
