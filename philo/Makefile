@@ -10,7 +10,9 @@ SRC_DIR = .
 BIN_DIR = ./bin
 
 SOURCES = main.c \
-			src/error.c
+			src/error.c \
+			src/utils.c \
+			src/preprocessing.c
 OBJECTS = $(addprefix $(BIN_DIR)/,$(SOURCES:.c=.o))
 
 all: $(NAME)
