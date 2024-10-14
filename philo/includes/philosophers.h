@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/14 11:30:47 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 18:20:22 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ long int		actual_time(void);
 // Prepare all philosophers and create the helper structure, if a problen
 // occur then a NULL ptr is returned and the program end.
 t_philosopher	*prepare_philosophers(char **argv);
+void			print_routine(t_philosopher *philo, char *action);
+void			*main_thread(void *param);
 // Start all philosophers threads.
 int				start_threads(t_philosopher *philo, t_helper *helper);
-
+void			free_t_philosopher(t_philosopher *philo, int philo_count);
+void			free_t_shared(t_shared *shared);
 #endif

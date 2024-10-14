@@ -13,6 +13,7 @@ SOURCES = main.c \
 			src/error.c \
 			src/utils.c \
 			src/preprocessing.c \
+			src/threading_preparation.c \
 			src/thread.c
 OBJECTS = $(addprefix $(BIN_DIR)/,$(SOURCES:.c=.o))
 

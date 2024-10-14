@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:04 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/14 17:47:44 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 18:15:43 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char **argv)
 	if (!philosophers)
 		return (1);
 	start_threads(philosophers, philosophers->helper);
-	free(philosophers->helper);
-	free(philosophers);
+	free_t_shared(philosophers->shared);
+	free_t_philosopher(philosophers, philosophers->helper->philo_count);
 	return (0);
 }

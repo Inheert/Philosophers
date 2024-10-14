@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:07:23 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/14 11:30:50 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 18:18:23 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static t_helper	*copy_t_helper_struct(t_helper *helper)
 	return (new);
 }
 
-static t_shared	*create_shared_struct()
+static t_shared	*create_shared_struct(void)
 {
 	t_shared	*shared;
 
@@ -82,7 +82,7 @@ int	initialize_philosophers_struct(t_philosopher *philo,
 			philo[i].left_fork = &philo[0].right_fork;
 		philo[i].helper = copy_t_helper_struct(helper);
 		if (!philo[i].helper)
-			return (1);
+			return (raise_error("mutex", "problem occur with helper copy."), 1);
 		philo[i].shared = shared;
 		philo[i].id = i + 1;
 		philo[i].last_eat = start;
@@ -104,13 +104,16 @@ t_philosopher	*prepare_philosophers(char **argv)
 				"a problem occur when initialize the shared struture."), NULL);
 	helper = parse_param(++argv);
 	if (!helper)
-		return (raise_error("helper",
+		return (free_t_shared(shared), raise_error("helper",
 				"a problem occur when initialize the helper struture."), NULL);
 	philosophers = malloc(sizeof(t_philosopher) * (helper->philo_count));
 	if (!philosophers)
-		return (free(helper), raise_error("philosophers",
+		return (free_t_shared(shared), free(helper), raise_error("philosophers",
 				"allocation failed for the philosophers structure."), NULL);
 	if (initialize_philosophers_struct(philosophers, helper, shared) != 0)
-		return (free(helper), free(philosophers), NULL);
-	return (philosophers);
+		return (free_t_shared(shared), free_t_philosopher(philosophers,
+				helper->philo_count), free(helper),
+			raise_error("philosophers",
+				"a problem occure while intitializing philo struct."), NULL);
+	return (free(helper), philosophers);
 }

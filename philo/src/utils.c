@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:58:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 17:54:41 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:19:14 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ long int	actual_time(void)
 	if (!start)
 		start = time;
 	return (time - start);
+}
+
+void	free_t_philosopher(t_philosopher *philo, int philo_count)
+{
+	int	i;
+
+	i = -1;
+	while (++i < philo_count)
+		if (philo[i].helper)
+			free(philo[i].helper);
+	free(philo);
+}
+
+void	free_t_shared(t_shared *shared)
+{
+	pthread_mutex_destroy(&shared->check_death);
+	pthread_mutex_destroy(&shared->check_meal);
+	free(shared);
 }
 
 int	ft_atoi(char *str)
@@ -50,4 +68,16 @@ int	ft_atoi(char *str)
 	if (num == 0)
 		return (raise_error("arg", "cant be equal to 0."), -1);
 	return (num);
+}
+
+void	print_routine(t_philosopher *philo, char *action)
+{
+	pthread_mutex_lock(&philo->shared->check_death);
+	if (philo->shared->is_someone_is_dead)
+	{
+		pthread_mutex_unlock(&philo->shared->check_death);
+		return ;
+	}
+	printf("%ld %d %s\n", actual_time(), philo->id, action);
+	pthread_mutex_unlock(&philo->shared->check_death);
 }
