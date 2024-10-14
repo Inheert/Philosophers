@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/13 19:02:56 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 11:30:47 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_helper
 typedef struct s_shared
 {
 	int				is_someone_is_dead;
-	pthread_mutex_t	write;
+	pthread_mutex_t	check_meal;
 	pthread_mutex_t	check_death;
 }	t_shared;
 

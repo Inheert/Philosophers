@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:07:23 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/13 19:03:05 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 11:30:50 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static t_shared	*create_shared_struct()
 	if (!shared)
 		return (NULL);
 	shared->is_someone_is_dead = 0;
-	if (pthread_mutex_init(&shared->write, NULL) != 0)
+	if (pthread_mutex_init(&shared->check_meal, NULL) != 0)
 		return (free(shared), NULL);
 	if (pthread_mutex_init(&shared->check_death, NULL) != 0)
 		return (free(shared), NULL);
