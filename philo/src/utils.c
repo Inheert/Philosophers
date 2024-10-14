@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:58:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/14 18:19:14 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 18:44:49 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ void	free_t_philosopher(t_philosopher *philo, int philo_count)
 	i = -1;
 	while (++i < philo_count)
 		if (philo[i].helper)
+		{
 			free(philo[i].helper);
+			pthread_mutex_destroy(&philo[i].right_fork);
+		}
 	free(philo);
 }
 

@@ -6,18 +6,19 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/14 18:20:06 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 18:46:52 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	is_philo_should_die(t_philosopher *philo)
+static int	is_philo_should_die(t_philosopher *philo)
 {
 	long int	died_time;
 
 	pthread_mutex_lock(&philo->shared->check_death);
-	if (philo->last_eat + philo->helper->time_to_die < actual_time())
+	if (philo->last_eat + philo->helper->time_to_die < actual_time()
+		|| philo->helper->philo_count < 2)
 	{
 		philo->is_dead = 1;
 		if (philo->shared->is_someone_is_dead)
@@ -33,14 +34,14 @@ int	is_philo_should_die(t_philosopher *philo)
 	return (0);
 }
 
-void	start_sleeping(t_philosopher *philo)
+static void	start_sleeping(t_philosopher *philo)
 {
 	usleep(philo->helper->time_to_sleep * 1000);
 	print_routine(philo, "is sleeping.");
 	print_routine(philo, "is thinking.");
 }
 
-void	start_eating(t_philosopher *philo)
+static void	start_eating(t_philosopher *philo)
 {
 	if (philo->id % 2 == 0)
 	{
@@ -66,7 +67,7 @@ void	start_eating(t_philosopher *philo)
 	pthread_mutex_unlock(&philo->right_fork);
 }
 
-int	is_philo_thread_still_valid(t_philosopher *philo)
+static int	is_philo_thread_still_valid(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->shared->check_meal);
 	if (philo->eat_count >= philo->helper->meal_count
