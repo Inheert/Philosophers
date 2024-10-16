@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
+/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:58:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/14 21:35:15 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/16 12:26:10 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	free_t_philosopher(t_philosopher *philo, int philo_count)
 
 void	free_t_shared(t_shared *shared)
 {
-	pthread_mutex_destroy(&shared->check_death);
-	pthread_mutex_destroy(&shared->check_meal);
+	pthread_mutex_destroy(&shared->print_routine);
 	free(shared);
 }
 
@@ -77,12 +76,15 @@ int	ft_atoi(char *str)
 
 void	print_routine(t_philosopher *philo, char *action)
 {
-	pthread_mutex_lock(&philo->shared->check_death);
-	if (philo->shared->is_someone_is_dead)
+	pthread_mutex_lock(&philo->shared->print_routine);
+	pthread_mutex_lock(&philo->philo_data);
+	if (philo->end_of_simu)
 	{
-		pthread_mutex_unlock(&philo->shared->check_death);
+		pthread_mutex_unlock(&philo->philo_data);
+		pthread_mutex_unlock(&philo->shared->print_routine);
 		return ;
 	}
-	printf("%ld %d %s %ld %ld\n", actual_time(), philo->id, action, philo->last_eat, actual_time());
-	pthread_mutex_unlock(&philo->shared->check_death);
+	pthread_mutex_unlock(&philo->philo_data);
+	printf("%ld %d %s\n", actual_time(), philo->id, action);
+	pthread_mutex_unlock(&philo->shared->print_routine);
 }

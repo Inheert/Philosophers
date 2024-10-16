@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
+/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/14 18:56:01 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/16 12:19:16 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ typedef struct s_helper
 
 typedef struct s_shared
 {
-	int				thread_ready;
-	int				is_someone_is_dead;
-	pthread_mutex_t	check_meal;
-	pthread_mutex_t	check_death;
+	pthread_mutex_t	print_routine;
 }	t_shared;
 
 // This structure is used to identify a philosopher, each one
@@ -50,9 +47,10 @@ typedef struct s_philosopher
 	long int		last_eat;
 	long int		died_time;
 	int				eat_count;
-	int				is_dead;
+	int				end_of_simu;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	right_fork;
+	pthread_mutex_t	philo_data;
 }	t_philosopher;
 
 // Print a customize error.

@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
+/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:04 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/14 21:42:12 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/16 12:46:00 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-// Manage args
-// Create structure to store philo and philo params
-// Dont check if a philo have to die in the thread but check it in the main process,
-// if a philo is waiting to take a fork he can survive even if last_meal + time_to_die < current_time
 
 int	main(int argc, char **argv)
 {

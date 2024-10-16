@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preprocessing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
+/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:07:23 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/14 18:56:19 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/16 12:16:39 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,7 @@ static t_shared	*create_shared_struct(void)
 	shared = malloc(sizeof(t_shared));
 	if (!shared)
 		return (NULL);
-	shared->is_someone_is_dead = 0;
-	shared->thread_ready = 0;
-	if (pthread_mutex_init(&shared->check_meal, NULL) != 0)
-		return (free(shared), NULL);
-	if (pthread_mutex_init(&shared->check_death, NULL) != 0)
+	if (pthread_mutex_init(&shared->print_routine, NULL) != 0)
 		return (free(shared), NULL);
 	return (shared);
 }
@@ -75,6 +71,8 @@ int	initialize_philosophers_struct(t_philosopher *philo,
 	i = -1;
 	while (++i < helper->philo_count)
 	{
+		if (pthread_mutex_init(&philo[i].philo_data, NULL) != 0)
+			return (raise_error("mutex", "problem occur with mutex init."), 1);
 		if (pthread_mutex_init(&philo[i].right_fork, NULL) != 0)
 			return (raise_error("mutex", "problem occur with mutex init."), 1);
 		if (i != 0)
@@ -88,7 +86,7 @@ int	initialize_philosophers_struct(t_philosopher *philo,
 		philo[i].id = i + 1;
 		philo[i].last_eat = start;
 		philo[i].eat_count = 0;
-		philo[i].is_dead = 0;
+		philo[i].end_of_simu = 0;
 	}
 	return (0);
 }
