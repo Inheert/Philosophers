@@ -6,7 +6,7 @@
 /*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:19:35 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/14 18:46:03 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/14 21:22:18 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 int	start_threads(t_philosopher *philo, t_helper *helper)
 {
-	int				i;
+	t_shared	*shared;
+	int			i;
 
+	shared = philo->shared;
 	i = -1;
 	while (++i < helper->philo_count)
 	{
@@ -24,6 +26,9 @@ int	start_threads(t_philosopher *philo, t_helper *helper)
 			return (raise_error("thread",
 					"a problem occur while creating threads."), 1);
 	}
+	pthread_mutex_lock(&shared->check_death);
+	shared->thread_ready = 1;
+	pthread_mutex_unlock(&shared->check_death);
 	i = -1;
 	while (++i < helper->philo_count)
 		pthread_join(philo[i].thread, NULL);
