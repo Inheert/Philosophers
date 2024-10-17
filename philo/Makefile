@@ -2,7 +2,7 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -g3 -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=thread
 
 INCLUDES = -I ./includes/
 
@@ -13,7 +13,7 @@ SOURCES = main.c \
 			src/error.c \
 			src/utils.c \
 			src/preprocessing.c \
-			src/threading_preparation.c \
+			src/thread_manager.c \
 			src/thread.c
 OBJECTS = $(addprefix $(BIN_DIR)/,$(SOURCES:.c=.o))
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/16 12:19:16 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:47:35 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_philosopher
 	pthread_t		thread;
 	int				id;
 	long int		last_eat;
-	long int		died_time;
 	int				eat_count;
 	int				end_of_simu;
 	pthread_mutex_t	*left_fork;

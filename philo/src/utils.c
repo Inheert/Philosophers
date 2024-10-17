@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:58:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/16 12:26:10 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/17 13:32:14 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,9 @@ void	free_t_philosopher(t_philosopher *philo, int philo_count)
 	while (++i < philo_count)
 	{
 		if (philo[i].helper)
-		{
 			free(philo[i].helper);
-			pthread_mutex_destroy(&philo[i].right_fork);
-		}
+		pthread_mutex_destroy(&philo[i].right_fork);
+		pthread_mutex_destroy(&philo[i].philo_data);
 	}
 	free(philo);
 }

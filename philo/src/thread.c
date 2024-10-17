@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/16 12:44:37 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/17 13:29:32 by Théo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	start_sleeping(t_philosopher *philo)
 {
-	print_routine(philo, "is sleeping.");
+	print_routine(philo, "is sleeping");
 	usleep(philo->helper->time_to_sleep * 1000);
-	print_routine(philo, "is thinking.");
+	print_routine(philo, "is thinking");
 }
 
 static void	start_eating(t_philosopher *philo)
@@ -24,23 +24,23 @@ static void	start_eating(t_philosopher *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->right_fork);
-		print_routine(philo, "has taken right fork.");
+		print_routine(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		print_routine(philo, "has taken left fork.");
+		print_routine(philo, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_routine(philo, "has taken left fork.");
+		print_routine(philo, "has taken a fork");
 		pthread_mutex_lock(&philo->right_fork);
-		print_routine(philo, "has taken right fork.");
+		print_routine(philo, "has taken a fork");
 	}
+	print_routine(philo, "is eating");
 	pthread_mutex_lock(&philo->philo_data);
 	philo->last_eat = actual_time();
-	pthread_mutex_unlock(&philo->philo_data);
-	print_routine(philo, "is eating.");
-	usleep(philo->helper->time_to_eat * 1000);
 	philo->eat_count++;
+	pthread_mutex_unlock(&philo->philo_data);
+	usleep(philo->helper->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(&philo->right_fork);
 }
