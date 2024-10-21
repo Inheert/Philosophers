@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/21 11:31:58 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:38:35 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ static void	start_eating(t_philosopher *philo)
 	}
 	pthread_mutex_lock(&philo->philo_data);
 	philo->last_eat = actual_time();
-	philo->eat_count++;
 	pthread_mutex_unlock(&philo->philo_data);
 	ft_usleep(philo->helper->time_to_eat);
 	print_routine(philo, "is eating");
+	philo->eat_count++;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(&philo->right_fork);
 }
