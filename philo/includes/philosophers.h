@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
+/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/17 12:47:35 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/21 11:09:02 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ int				start_threads(t_philosopher *philo, t_helper *helper);
 void			free_t_philosopher(t_philosopher *philo, int philo_count);
 // Free the shared struct and destroy mutexes.
 void			free_t_shared(t_shared *shared);
+void			ft_usleep(long int ms);
 #endif
