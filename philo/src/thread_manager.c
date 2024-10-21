@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_manager.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Théo <theoclaereboudt@gmail.com>           +#+  +:+       +#+        */
+/*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:19:35 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/17 13:16:13 by Théo             ###   ########.fr       */
+/*   Updated: 2024/10/21 11:34:52 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	is_someone_dead(t_philosopher *philo, t_helper *helper)
 		if (philo[i].last_eat + helper->time_to_die < actual_time())
 		{
 			pthread_mutex_unlock(&philo[i].philo_data);
-			print_routine(&philo[i], "is dead.");
+			print_routine(&philo[i], "died");
 			set_end_of_simu(philo, helper);
 			return (1);
 		}
