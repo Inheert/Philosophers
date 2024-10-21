@@ -6,11 +6,20 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/21 11:20:06 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:31:58 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void	ft_usleep(long int ms)
+{
+	long int	start;
+
+	start = actual_time();
+	while (actual_time() - start < ms)
+		usleep(1000);
+}
 
 static void	start_sleeping(t_philosopher *philo)
 {

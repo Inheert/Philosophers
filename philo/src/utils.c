@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:58:35 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/21 11:27:42 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:31:53 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,4 @@ void	print_routine(t_philosopher *philo, char *action)
 	pthread_mutex_unlock(&philo->philo_data);
 	printf("%ld %d %s\n", actual_time(), philo->id, action);
 	pthread_mutex_unlock(&philo->shared->print_routine);
-}
-
-void	ft_usleep(long int ms)
-{
-	long int	start;
-
-	start = actual_time();
-	while (actual_time() - start < ms)
-		usleep(1000);
 }
