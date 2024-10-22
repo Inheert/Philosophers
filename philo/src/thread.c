@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/21 11:38:35 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/22 07:38:48 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_usleep(long int ms)
 
 	start = actual_time();
 	while (actual_time() - start < ms)
-		usleep(1000);
+		usleep(500);
 }
 
 static void	start_sleeping(t_philosopher *philo)
