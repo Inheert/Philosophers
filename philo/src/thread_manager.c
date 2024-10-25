@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:19:35 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/25 10:26:31 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/25 11:37:40 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	start_threads(t_philosopher *philo, t_helper *helper)
 	}
 	while (!is_someone_dead(philo, helper)
 		&& is_someone_still_hungry(philo, helper))
-		usleep(500);
+		usleep(100);
 	i = -1;
 	while (++i < helper->philo_count)
 		pthread_join(philo[i].thread, NULL);

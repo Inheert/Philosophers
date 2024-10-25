@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/25 10:29:07 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/25 12:27:24 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	*main_thread(void *param)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)param;
-	if (philo->id & 1)
-		usleep(500);
+	if (philo->id % 2 != 0)
+		ft_usleep(philo->helper->time_to_eat * 0.9 + 1);
 	pthread_mutex_lock(&philo->philo_data);
 	while (!philo->end_of_simu)
 	{
