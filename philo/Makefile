@@ -2,7 +2,7 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -g3 -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror #-fsanitize=thread
 
 INCLUDES = -I ./includes/
 
@@ -20,7 +20,7 @@ OBJECTS = $(addprefix $(BIN_DIR)/,$(SOURCES:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(INCLUDES)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(INCLUDES) -lpthread
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

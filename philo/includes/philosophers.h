@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:50:06 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/21 11:32:00 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/25 10:27:35 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct s_helper
 	int				meal_count;
 }	t_helper;
 
+// This structure store a mutex that is used to protect printf
+// all philosophers have a pointer to this structure
 typedef struct s_shared
 {
 	pthread_mutex_t	print_routine;

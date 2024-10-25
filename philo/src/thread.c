@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:22:09 by tclaereb          #+#    #+#             */
-/*   Updated: 2024/10/22 07:38:48 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/25 10:29:07 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_usleep(long int ms)
 
 	start = actual_time();
 	while (actual_time() - start < ms)
-		usleep(500);
+		usleep(150);
 }
 
 static void	start_sleeping(t_philosopher *philo)
@@ -30,28 +30,20 @@ static void	start_sleeping(t_philosopher *philo)
 
 static void	start_eating(t_philosopher *philo)
 {
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(&philo->right_fork);
-		print_routine(philo, "has taken a fork");
-		pthread_mutex_lock(philo->left_fork);
-		print_routine(philo, "has taken a fork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->left_fork);
-		print_routine(philo, "has taken a fork");
-		pthread_mutex_lock(&philo->right_fork);
-		print_routine(philo, "has taken a fork");
-	}
+	pthread_mutex_lock(&philo->right_fork);
+	print_routine(philo, "has taken a fork");
+	pthread_mutex_lock(philo->left_fork);
+	print_routine(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->philo_data);
 	philo->last_eat = actual_time();
 	pthread_mutex_unlock(&philo->philo_data);
 	ft_usleep(philo->helper->time_to_eat);
 	print_routine(philo, "is eating");
+	pthread_mutex_lock(&philo->philo_data);
 	philo->eat_count++;
-	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(&philo->right_fork);
+	pthread_mutex_unlock(&philo->philo_data);
+	pthread_mutex_unlock(philo->left_fork);
 }
 
 void	*main_thread(void *param)
@@ -59,6 +51,8 @@ void	*main_thread(void *param)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)param;
+	if (philo->id & 1)
+		usleep(500);
 	pthread_mutex_lock(&philo->philo_data);
 	while (!philo->end_of_simu)
 	{

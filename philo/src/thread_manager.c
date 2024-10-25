@@ -6,7 +6,7 @@
 /*   By: tclaereb <tclaereb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:19:35 by Théo              #+#    #+#             */
-/*   Updated: 2024/10/21 11:34:52 by tclaereb         ###   ########.fr       */
+/*   Updated: 2024/10/25 10:26:31 by tclaereb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	is_someone_dead(t_philosopher *philo, t_helper *helper)
 	while (++i < helper->philo_count)
 	{
 		pthread_mutex_lock(&philo[i].philo_data);
-		if (philo[i].last_eat + helper->time_to_die < actual_time())
+		if (philo[i].last_eat + helper->time_to_die <= actual_time())
 		{
 			pthread_mutex_unlock(&philo[i].philo_data);
 			print_routine(&philo[i], "died");
@@ -104,7 +104,7 @@ int	start_threads(t_philosopher *philo, t_helper *helper)
 	}
 	while (!is_someone_dead(philo, helper)
 		&& is_someone_still_hungry(philo, helper))
-		continue ;
+		usleep(500);
 	i = -1;
 	while (++i < helper->philo_count)
 		pthread_join(philo[i].thread, NULL);
